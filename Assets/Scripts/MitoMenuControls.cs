@@ -6,6 +6,7 @@ public class MitoMenuControls : MonoBehaviour
 {
     private GameObject[] mitos;
     private Vector3 mitoLocalScale;
+    private float originalCloseEnoughDistance;
 
     public void updateFusionProbability(string newProbability)
     {
@@ -52,15 +53,22 @@ public class MitoMenuControls : MonoBehaviour
     {
         mitos = GameObject.FindGameObjectsWithTag("Mito");
 
+        // get original values of first mitos intantiated with default values
         if (mitoLocalScale.Equals(Vector3.zero) && mitos.Length > 0)
         {
+            var mitoScript = mitos[0].GetComponent<MitochondriaScript>();
+
             mitoLocalScale = mitos[0].transform.localScale;
+            originalCloseEnoughDistance = mitoScript.closeEnoughDistance;
         }
 
         for (int i = 0; i < mitos.Length; i++)
         {
             var mito = mitos[i];
+            var mitoScript = mito.GetComponent<MitochondriaScript>();
+
             mito.transform.localScale = mitoLocalScale * newScale;
+            mitoScript.closeEnoughDistance = originalCloseEnoughDistance * newScale;
         }
     }
 }

@@ -17,8 +17,8 @@ public class MitochondriaScript : MonoBehaviour
     public int uid = 0;
     public float fusionProbability = 1f;
     public float fissionProbability = 0.001f;
+    public float closeEnoughDistance = 0.15f;
 
-    private float closeEnoughDistance = 0.15f;
     private float fps;
 
     // Start is called before the first frame update
