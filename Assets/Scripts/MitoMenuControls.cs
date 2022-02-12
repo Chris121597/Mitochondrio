@@ -71,4 +71,17 @@ public class MitoMenuControls : MonoBehaviour
             mitoScript.closeEnoughDistance = originalCloseEnoughDistance * newScale;
         }
     }
+
+    public void updateMitoSpeed(float newSpeed)
+    {
+        mitos = GameObject.FindGameObjectsWithTag("Mito");
+
+        for (int i = 0; i < mitos.Length; i++)
+        {
+            var mito = mitos[i];
+            var mitoScript = mito.GetComponent<MitochondriaScript>();
+
+            mitoScript.speed = newSpeed;
+        }
+    }
 }
