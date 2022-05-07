@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class net1 : MonoBehaviour
 {
+    // cytoskeleton parameters
     public GameObject mito;
     private int numMainBranches = 10;
     private int avgMainBranchLength = 10;
@@ -14,10 +15,11 @@ public class net1 : MonoBehaviour
     private float nucleusRadius = 1.5f;
     private float nucleusCenter = 0f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+    // mitochondria parameters
+    private float mitoSpeed = 1.5f;
+    private float mitoFusionProbability = 1f;
+    private float mitoFissionProbability = 0.001f;
+    private float mitoScale = 1;
 
     public void StartSimulation()
     {
@@ -64,12 +66,53 @@ public class net1 : MonoBehaviour
                 mitoScript.target = network;
                 mitoScript.j = jj;
                 mitoScript.current = current;
+
+                // set user selected variables for the mito
+                newMito.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f) * mitoScale;
+                mitoScript.closeEnoughDistance = mitoScript.getOriginalCloseEnoughDistance() * mitoScale;
+                mitoScript.speed = mitoSpeed;
+                mitoScript.fusionProbability = mitoFusionProbability;
+                mitoScript.fissionProbability = mitoFissionProbability;
             }
         }
 
     }
 
-    // variables set by user
+
+    // mito variables set by user
+    public void setMitoSpeed(float newSpeed)
+    {
+        mitoSpeed = newSpeed;
+    }
+
+    public void setMitoFusionProbability(string newProbability)
+    {
+        try
+        {
+            float floatNewProbability = (float)System.Convert.ToDouble(newProbability);
+            floatNewProbability /= 100f;
+            mitoFusionProbability = floatNewProbability;
+        }
+        catch (System.FormatException) { }
+    }
+
+    public void setMitoFissionProbability(string newProbability)
+    {
+        try
+        {
+            float floatNewProbability = (float)System.Convert.ToDouble(newProbability);
+            floatNewProbability /= 100f;
+            mitoFissionProbability = floatNewProbability;
+        }
+        catch (System.FormatException) { }
+    }
+
+    public void setMitoScale(float newScale)
+    {
+        mitoScale = newScale;
+    }
+
+    // cytoskeleton variables set by user
     public void setNumMainBranches(string value)
     {
         try
@@ -230,9 +273,21 @@ public class net1 : MonoBehaviour
             lineRenderer.SetPosition(counter, nodes[i]);
             counter++;
 
-            if (i == nodes.Count - 1) network.Add(new List<(int, Vector3)> { (i - 1, nodes[i - 1]) });
-            else if (i > 0) network.Add(new List<(int, Vector3)> { (i - 1, nodes[i - 1]), (i + 1, nodes[i + 1]) });
-            else network.Add(new List<(int, Vector3)> { (i + 1, nodes[i + 1]) });
+            if (i == nodes.Count - 1)
+            {
+                // last node will only  have one neighbour, which is the second last node
+                network.Add(new List<(int, Vector3)> { (i - 1, nodes[i - 1]) });
+            }
+            else if (i > 0)
+            {
+                // middle nodes will have two neighbours, one on the left and another one on the right (in a main branch) 
+                network.Add(new List<(int, Vector3)> { (i - 1, nodes[i - 1]), (i + 1, nodes[i + 1]) });
+            }
+            else
+            {
+                // first node will only have one neighbour, wich is the second node
+                network.Add(new List<(int, Vector3)> { (i + 1, nodes[i + 1]) });
+            }
         }
     }
 

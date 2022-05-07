@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/***
+ * The functions in this class serve to modify the current mitos already instantiated during run time.
+ */
 public class MenuControls : MonoBehaviour
 {
     public GameObject menu;

@@ -58,7 +58,7 @@ public class MitoMenuControls : MonoBehaviour
         {
             var mitoScript = mitos[0].GetComponent<MitochondriaScript>();
 
-            mitoLocalScale = mitos[0].transform.localScale;
+            mitoLocalScale = new Vector3(0.2f, 0.2f, 0.2f);
             originalCloseEnoughDistance = mitoScript.closeEnoughDistance;
         }
 

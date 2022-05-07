@@ -2743,6 +2743,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1831892196}
+        m_TargetAssemblyTypeName: net1, Assembly-CSharp
+        m_MethodName: setMitoFissionProbability
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3269,6 +3281,18 @@ MonoBehaviour:
       - m_Target: {fileID: 576445293}
         m_TargetAssemblyTypeName: MitoMenuControls, Assembly-CSharp
         m_MethodName: updateFusionProbability
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1831892196}
+        m_TargetAssemblyTypeName: net1, Assembly-CSharp
+        m_MethodName: setMitoFusionProbability
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7175,6 +7199,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1831892196}
+        m_TargetAssemblyTypeName: net1, Assembly-CSharp
+        m_MethodName: setMitoScale
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1677175045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8468,7 +8504,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 421830157}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 50
+  m_MaxValue: 10
   m_WholeNumbers: 0
   m_Value: 1.5
   m_OnValueChanged:
@@ -8477,6 +8513,18 @@ MonoBehaviour:
       - m_Target: {fileID: 2083110676}
         m_TargetAssemblyTypeName: MitoMenuControls, Assembly-CSharp
         m_MethodName: updateMitoSpeed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1831892196}
+        m_TargetAssemblyTypeName: net1, Assembly-CSharp
+        m_MethodName: setMitoSpeed
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

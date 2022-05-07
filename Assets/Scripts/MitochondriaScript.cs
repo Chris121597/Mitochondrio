@@ -17,7 +17,13 @@ public class MitochondriaScript : MonoBehaviour
     public int uid = 0;
     public float fusionProbability = 1f;
     public float fissionProbability = 0.001f;
-    public float closeEnoughDistance = 0.15f;
+    private float originalCloseEnoughDistance = 0.15f;
+    public float closeEnoughDistance;
+    /** 
+     * this timout prevents from the repel logic from being fired twice when
+     * two mitos bumpt into each other
+     */
+    public bool repelTimeOut = false;
 
     private float fps;
 
@@ -51,6 +57,7 @@ public class MitochondriaScript : MonoBehaviour
 
         }
 
+        // if it's follower, adjust current to leader's position
         if (isFollower)
         {
             var leaderPosition = leader.transform.position;
@@ -62,11 +69,12 @@ public class MitochondriaScript : MonoBehaviour
             return;
         }
 
-        if (target == null) 
+        if (target == null)
+        {
             return;
+        }
 
         float dist = Vector3.Distance(transform.position, target[current][j].Item2);
-
         if (dist > closeEnoughDistance)
         {   
             if ( Random.Range(0f, 1f) > 0.80 )
@@ -81,30 +89,70 @@ public class MitochondriaScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // get the class of the other mito 
+        var otherMito = other.GetComponent<MitochondriaScript>();
+
+        // if we didnt bumpt into a mito or if fusion did not happen
         if (!other.name.Contains("Mitochondrion") || Random.Range(0f, 1f) > fusionProbability)
         {
+            // if fussion did not happen, move the mitos in opposite directions of each other since they shouldn't be 
+            // allowed to use the same space
+            if (other.name.Contains("Mitochondrion") && !repelTimeOut)
+            {
+                if (current < otherMito.current)
+                {
+                    current = Mathf.Max(current - 1, 0);
+                    otherMito.current = Mathf.Min(otherMito.current + 1, otherMito.target.Count - 1);
+                }
+                else
+                {
+                    current = Mathf.Min(current + 1, target.Count - 1);
+                    otherMito.current = Mathf.Max(otherMito.current - 1, 0);
+                }
+                j = 0;
+                otherMito.j = 0;
+                otherMito.repelTimeOut = true;
+            }
+            else
+            {
+                repelTimeOut = false;
+            }
             return;
         }
-        var otherMito = other.GetComponent<MitochondriaScript>(); // get the class of the other mito 
-
 
         if (isMainLeader && (otherMito.isMainLeader || otherMito.hasMainLeader))
         {
+            MitochondriaScript snakeBitingTail = isSnakeBitingItsTail(uid, otherMito);
 
-            bool snakeBitingTail = isSnakeBitingItsTail(uid, otherMito);
-            if (snakeBitingTail)
-            {
-                return;
-            }
-            leader = otherMito;
-            isMainLeader = false;
             isFollower = true;
             hasMainLeader = true;
+            isMainLeader = false;
+
+            if (snakeBitingTail != null)
+            {
+                // make the follower mito the main leader
+                snakeBitingTail.isMainLeader = true;
+                snakeBitingTail.hasMainLeader = true;
+                snakeBitingTail.leader = null;
+                snakeBitingTail.isFollower = false;
+                snakeBitingTail.followers += 1;
+                leader = snakeBitingTail;
+                followers -= 1;
+
+                // make target of the mito that was following the current mito, the current mito's target
+                snakeBitingTail.current = current;
+                snakeBitingTail.j = j;
+                snakeBitingTail.target = target;
+                return;
+            }
+
+            // make the mito we bumped into the leader
+            leader = otherMito;
             otherMito.followers += 1;
         }
-
         else if (!isFollower && !isMainLeader)
         {
+            // make the mito we bumped into the leader
             isFollower = true;
             leader = otherMito;
             hasMainLeader = true;
@@ -116,23 +164,29 @@ public class MitochondriaScript : MonoBehaviour
             }
 
         }
-
-
     }
 
-    private bool isSnakeBitingItsTail(int headUid, MitochondriaScript tail)
+    /**
+     * Checks to see if a leader is colliding with one of its followers. If so, it returns the closest follower and null
+     * otherwise.
+    */
+    private MitochondriaScript isSnakeBitingItsTail(int headUid, MitochondriaScript tail)
     {
-        if (headUid == tail.uid)
+        if (tail.leader && headUid == tail.leader.uid)
         {
-            return true;
+            return tail;
         }
 
         if (tail.leader == null)
         {
-            return false;
+            return null;
         }
 
         return isSnakeBitingItsTail(headUid, tail.leader);
     }
 
+    public float getOriginalCloseEnoughDistance()
+    {
+        return originalCloseEnoughDistance;
+    }
 }
